@@ -1,0 +1,21 @@
+server:
+  port: 8181
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/resource-service-db
+    username: resource
+    password: s3cr3t
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+aws:
+  s3:
+    endpointUrl: "http://localhost:4566"
+    region: "us-east-1"
+    bucket: localstack-s3-bucket
+    accessKey: localstack
+    secretKey: localstack

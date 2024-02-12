@@ -1,0 +1,28 @@
+### POST non mp3 (non audio/mpeg)
+POST http://localhost:8181/resources
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Type: image/png
+Content-Disposition: form-data; name="mp3"; filename="microservice_architecture_overview.png"
+
+< ./statics/images/module1_basic_structure.png
+--WebAppBoundary--
+
+### POST mp3 (audio/mpeg)
+POST http://localhost:8181/resources
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Type: audio/mpeg
+Content-Disposition: form-data; name="mp3"; filename="valhalla_calling.mp3"
+
+< ./statics/valhalla_calling.mp3
+--WebAppBoundary--
+
+### Get the binary audio data of a resource
+GET http://localhost:8181/resources/1
+
+
+### Delete Resource by id (CSV string id's separated ',')
+DELETE http://localhost:8181/resources?id=1
