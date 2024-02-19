@@ -3,43 +3,41 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.epam.learn.microservices.fundamental</groupId>
-        <artifactId>jmp.microservices-fundamental</artifactId>
+        <groupId>com.epam.learn.microservices.fundamental.services.song</groupId>
+        <artifactId>song-service-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>com.epam.learn.microservices.fundamental.processors.resources</groupId>
-    <artifactId>resource-processor</artifactId>
-    <name>resource-processor</name>
-    <description>resource-processor</description>
+    <artifactId>song-service-feign-client</artifactId>
+    <name>song-service-client</name>
+    <description>song-service-client</description>
     <properties>
         <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <!--internal project dependencies-->
         <dependency>
             <groupId>com.epam.learn.microservices.fundamental</groupId>
             <artifactId>common-module</artifactId>
         </dependency>
-        <!--3rd party dependencies-->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tika</groupId>
-            <artifactId>tika-parsers</artifactId>
+            <groupId>com.epam.learn.microservices.fundamental.services.song</groupId>
+            <artifactId>song-service-api</artifactId>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

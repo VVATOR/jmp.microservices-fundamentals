@@ -1,6 +1,7 @@
 package com.epam.learn.microservices.fundamental.processors.resource;
 
-import com.epam.learn.microservices.fundamental.processors.resource.services.impls.Mp3MetadataExtractor;
+import com.epam.learn.microservices.fundamental.processors.resource.services.MetadataExtractor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,11 +11,12 @@ import java.io.File;
 import java.io.FileInputStream;
 
 @SpringBootApplication
+@Slf4j
 public class ResourceProcessorApplication implements CommandLineRunner {
-    private final Mp3MetadataExtractor mp3MetadataExtractor;
+    private final MetadataExtractor mp3MetadataExtractor;
 
     @Autowired
-    public ResourceProcessorApplication(Mp3MetadataExtractor mp3MetadataExtractor) {
+    public ResourceProcessorApplication(MetadataExtractor mp3MetadataExtractor) {
         this.mp3MetadataExtractor = mp3MetadataExtractor;
     }
 
@@ -27,6 +29,7 @@ public class ResourceProcessorApplication implements CommandLineRunner {
         final var filePath = new File("D:\\valhalla_calling.mp3");
         final var fileInputStream = new FileInputStream(filePath);
         final var fileName = filePath.getName();
-        mp3MetadataExtractor.prepareMetadataDto(1, fileInputStream, fileName);
+        final var metadata = mp3MetadataExtractor.prepareMetadataDto(1, fileInputStream, fileName);
+        log.info("{}", metadata);
     }
 }

@@ -7,25 +7,27 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.0</version>
     </parent>
-    <groupId>com.epam.learn.microcervices.fundamental</groupId>
+
+    <groupId>com.epam.learn.microservices.fundamental</groupId>
     <artifactId>jmp.microservices-fundamental</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>com.epam.learn.microcervices.fundamental</name>
-    <description>com.epam.learn.microcervices.fundamental</description>
+    <name>JMP Microservices fundamental</name>
+    <description>JMP Microservices fundamental</description>
     <packaging>pom</packaging>
+
     <modules>
         <module>common-module</module>
-        <module>song-service</module>
-        <module>resource-service</module>
+        <module>song-service-parent</module>
+        <module>resource-service-parent</module>
         <module>resource-processor</module>
     </modules>
 
     <properties>
         <java.version>17</java.version>
-        <tika.parsers.version>1.28.5</tika.parsers.version>
         <spring.cloud.starter.parent.version>2023.0.0</spring.cloud.starter.parent.version>
         <aws.sdk.version>2.23.17</aws.sdk.version>
         <lombok.version>1.18.28</lombok.version>
+        <tika.parsers.version>1.28.5</tika.parsers.version>
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
     </properties>
 
@@ -50,20 +52,22 @@
                 <artifactId>s3</artifactId>
                 <version>${aws.sdk.version}</version>
             </dependency>
+                <!--internal project dependencies-->
             <dependency>
-                <groupId>com.epam.learn.microcervices.fundamental.services.dto</groupId>
+                <groupId>com.epam.learn.microservices.fundamental</groupId>
                 <artifactId>common-module</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <!--3rd party dependencies-->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.tika</groupId>
                 <artifactId>tika-parsers</artifactId>
                 <version>${tika.parsers.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

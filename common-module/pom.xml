@@ -3,14 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.epam.learn.microcervices.fundamental</groupId>
+        <groupId>com.epam.learn.microservices.fundamental</groupId>
         <artifactId>jmp.microservices-fundamental</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>com.epam.learn.microcervices.fundamental.services.dto</groupId>
     <artifactId>common-module</artifactId>
-    <name>common-dto</name>
-    <description>common-dto</description>
+    <name>common-module</name>
+    <description>common-module</description>
     <properties>
         <java.version>17</java.version>
     </properties>
