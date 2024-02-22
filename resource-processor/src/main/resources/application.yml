@@ -4,3 +4,7 @@ spring:
 
   banner:
     location: classpath:banner.txt
+
+retry:
+  maxAttempts: 10
+  backOffPeriod: 3000

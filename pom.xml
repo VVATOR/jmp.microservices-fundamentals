@@ -25,6 +25,7 @@
     <properties>
         <java.version>17</java.version>
         <spring.cloud.starter.parent.version>2023.0.0</spring.cloud.starter.parent.version>
+        <spring.retry.version>2.0.4</spring.retry.version>
         <aws.sdk.version>2.23.17</aws.sdk.version>
         <lombok.version>1.18.28</lombok.version>
         <tika.parsers.version>1.28.5</tika.parsers.version>
@@ -41,6 +42,11 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>org.springframework.retry</groupId>
+                <artifactId>spring-retry</artifactId>
+                <version>${spring.retry.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
                 <version>${aws.sdk.version}</version>
@@ -52,7 +58,7 @@
                 <artifactId>s3</artifactId>
                 <version>${aws.sdk.version}</version>
             </dependency>
-                <!--internal project dependencies-->
+            <!--internal project dependencies-->
             <dependency>
                 <groupId>com.epam.learn.microservices.fundamental</groupId>
                 <artifactId>common-module</artifactId>

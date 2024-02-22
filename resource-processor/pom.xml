@@ -23,10 +23,6 @@
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
         <!--internal project dependencies-->
         <dependency>
             <groupId>com.epam.learn.microservices.fundamental</groupId>
