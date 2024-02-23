@@ -58,6 +58,16 @@
                 <artifactId>common-module</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.epam.learn.microservices.fundamental.services.resource</groupId>
+                <artifactId>resource-service-feign-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.epam.learn.microservices.fundamental.services.song</groupId>
+                <artifactId>song-service-feign-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!--3rd party dependencies-->
             <dependency>
                 <groupId>org.projectlombok</groupId>
