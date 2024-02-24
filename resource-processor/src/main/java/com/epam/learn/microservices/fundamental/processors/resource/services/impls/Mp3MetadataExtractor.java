@@ -23,7 +23,7 @@ public class Mp3MetadataExtractor implements MetadataExtractor {
         super();
     }
 
-    public MetadataDto prepareMetadataDto(Integer resourceId, InputStream mp3InputStream, String fileName) {
+    public MetadataDto prepareMetadataDto(Integer resourceId, InputStream mp3InputStream) {
         try {
             final var autoDetectParser = new AutoDetectParser();
             final var handler = new BodyContentHandler();
@@ -38,7 +38,7 @@ public class Mp3MetadataExtractor implements MetadataExtractor {
             final var year = metadata.get(RELEASE_DATE_METADATA_TAG);
             return new MetadataDto(resourceId, title, artist, album, length, year);
         } catch (Exception e) {
-            throw new MetadataPreparationException(String.format("Can't get metadata for '%s' file.", fileName), e);
+            throw new MetadataPreparationException(String.format("Can't get metadata for resourceId '%d'.", resourceId), e);
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.epam.learn.microservices.fundamental.processors.resource;
 
+import com.epam.learn.microservices.fundamental.common.dto.IdResponse;
+import com.epam.learn.microservices.fundamental.common.dto.MetadataDto;
 import com.epam.learn.microservices.fundamental.processors.resource.services.MetadataExtractor;
 import com.epam.learn.microservices.fundamental.services.clients.feign.ResourceServiceFeignClient;
 import com.epam.learn.microservices.fundamental.services.clients.feign.SongServiceFeignClient;
@@ -9,22 +11,28 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.retry.support.RetryTemplate;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @SpringBootApplication
 @EnableFeignClients(clients = {ResourceServiceFeignClient.class, SongServiceFeignClient.class})
 public class ResourceProcessorApplication implements CommandLineRunner {
+    private final RetryTemplate retryTemplate;
     private final MetadataExtractor metadataExtractor;
-
     private final ResourceServiceFeignClient resourceServiceFeignClient;
     private final SongServiceFeignClient songServiceFeignClient;
 
     @Autowired
-    public ResourceProcessorApplication(final MetadataExtractor metadataExtractor,
+    public ResourceProcessorApplication(final RetryTemplate retryTemplate,
+                                        final MetadataExtractor metadataExtractor,
                                         final ResourceServiceFeignClient resourceServiceFeignClient,
                                         final SongServiceFeignClient songServiceFeignClient) {
+        this.retryTemplate = retryTemplate;
         this.metadataExtractor = metadataExtractor;
         this.resourceServiceFeignClient = resourceServiceFeignClient;
         this.songServiceFeignClient = songServiceFeignClient;
@@ -35,22 +43,50 @@ public class ResourceProcessorApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
-        final var responseResource = resourceServiceFeignClient.getResourceFileById(1);
-        final var resource = responseResource.getBody();
+    public void run(String... args) {
+        final var resourceId = 1;
+        try {
+            log.info("Processing of resource with resourceId={} started.", resourceId);
+            final byte[] mp3AsBytes = getSynchronousResourceData(resourceId);
 
-        final var contentAsByteArray = resource.getContentAsByteArray();
-        try (final var fis = new ByteArrayInputStream(contentAsByteArray)) {
-            log.info("parse metadata...");
-            final var metadataDto = metadataExtractor.prepareMetadataDto(1, fis, "song");
-            log.info("{}", metadataDto);
-            log.info("Sync call -> song-service : save metadata...");
+            try (final var bais = new ByteArrayInputStream(mp3AsBytes)) {
 
+                final var metadataDto = metadataExtractor.prepareMetadataDto(resourceId, bais);
+                final var idResponseResponseEntity = sendSynchronouslySongMetadata(metadataDto);
+                log.info("Metadata of resource with resourceId={} was added to song service with id={}.",resourceId,idResponseResponseEntity.id());
 
-            final var idResponseResponseEntity = songServiceFeignClient.postMetadata(metadataDto);
-            log.info("Sync call -> song-service : save metadata..." + idResponseResponseEntity);
+                log.info("Processing of resource with resourceId={} finished successfully.", resourceId);
+            }
         } catch (Exception e) {
-            log.error("{}", e.getMessage());
+            log.error("Processing of resource with resourceId={} finished with error! {}", resourceId, e.getMessage());
+        }
+    }
+
+    private byte[] getSynchronousResourceData(final Integer resourceId) throws IOException {
+        return retryTemplate.execute(context -> {
+                    log.info("Get resource bytes of resource with resourceId={} (attempt {}).", resourceId, context.getRetryCount());
+                    randomIssueThrowToInitiateRetry();
+                    return Objects.requireNonNull(resourceServiceFeignClient.getResourceFileById(resourceId)
+                            .getBody()).getContentAsByteArray();
+                }
+        );
+    }
+
+    private IdResponse sendSynchronouslySongMetadata(final MetadataDto metadataDto) {
+        return retryTemplate.execute(context -> {
+                    log.info("Send song metadata of resource with resourceId={} (attempt {}).", metadataDto.resourceId(), context.getRetryCount());
+                    randomIssueThrowToInitiateRetry();
+                    return songServiceFeignClient
+                            .postMetadata(metadataDto)
+                            .getBody();
+                }
+        );
+    }
+
+    private static void randomIssueThrowToInitiateRetry() {
+        final var isPresentRandomIssueForRetry = ThreadLocalRandom.current().nextBoolean();
+        if (isPresentRandomIssueForRetry) {
+            throw new RuntimeException("Something happened. Retry!");
         }
     }
 }
