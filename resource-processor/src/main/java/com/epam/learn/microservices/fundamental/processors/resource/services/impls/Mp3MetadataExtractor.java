@@ -36,7 +36,7 @@ public class Mp3MetadataExtractor implements MetadataExtractor {
             final var album = metadata.get(ALBUM_METADATA_TAG);
             final var length = metadata.get(DURATION_METADATA_TAG);
             final var year = metadata.get(RELEASE_DATE_METADATA_TAG);
-            return new MetadataDto(title, artist, album, length, resourceId, year);
+            return new MetadataDto(resourceId, title, artist, album, length, year);
         } catch (Exception e) {
             throw new MetadataPreparationException(String.format("Can't get metadata for '%s' file.", fileName), e);
         }

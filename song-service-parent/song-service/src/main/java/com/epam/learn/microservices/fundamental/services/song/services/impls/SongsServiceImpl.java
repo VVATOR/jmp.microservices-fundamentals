@@ -39,11 +39,11 @@ public class SongsServiceImpl implements SongsService {
         return songRepository.findById(id)
                 .map(songEntity ->
                         new MetadataDto(
+                                songEntity.getResourceId(),
                                 songEntity.getName(),
                                 songEntity.getArtist(),
                                 songEntity.getAlbum(),
                                 songEntity.getLength(),
-                                songEntity.getResourceId(),
                                 songEntity.getYear()
                         )
                 );
