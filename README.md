@@ -111,4 +111,9 @@ Implementation can be based on the [Spring Retry Template](https://docs.spring.i
 For this module you could use any of the messaging brokers for asynchronous communication (it’s better to discuss with expert).
 
 ![module2_basic_structure.png](statics/images/module2_basic_structure.png)
+
+
+## NOTES
+
+- To create Queue, Exchange and Binding should processor (application processor).
 </details>

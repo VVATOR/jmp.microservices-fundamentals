@@ -5,6 +5,16 @@ spring:
   banner:
     location: classpath:banner.txt
 
+  rabbitmq:
+    host: ${RABBIT_MQ_HOST}
+    port: ${RABBIT_MQ_PORT}
+    username: ${RABBIT_MQ_USERNAME}
+    password: ${RABBIT_MQ_PASSWORD}
+    template:
+      exchange: "x.processing-exchange"
+      routing-key: "rk.processing-exchange"
+      default-receive-queue: "q.processing-queue"
+
 retry:
   maxAttempts: 5
   backOffPeriod: 1000

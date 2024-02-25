@@ -25,6 +25,15 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  rabbitmq:
+    host: ${RABBIT_MQ_HOST}
+    port: ${RABBIT_MQ_PORT}
+    username: ${RABBIT_MQ_USERNAME}
+    password: ${RABBIT_MQ_PASSWORD}
+    template:
+      exchange: "x.processing-exchange"
+      routing-key: "rk.processing-exchange"
+      default-receive-queue: "q.processing-queue"
 
 aws:
   s3:

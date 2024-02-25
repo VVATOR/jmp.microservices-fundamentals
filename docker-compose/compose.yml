@@ -54,6 +54,26 @@ services:
     networks:
       - spring-services-network
 
+  ##### Messaging #####
+  rabbitmq:
+    image: rabbitmq:3.10.7-management
+    restart: no
+    ports:
+      - 15672:15672
+      - 5672:5672
+    #  rabbitmq:
+    #    image: rabbitmq:3-alpine
+    #    container_name: "rabbitmq"
+    #    ports:
+    #      - 5672:5672
+    #      - 15672:15672
+    #    volumes:
+    #      - ./rabbitmq/data/:/var/lib/rabbitmq/
+    #      - ./rabbitmq/log/:/var/log/rabbitmq
+    ##    networks:
+    ##      - rabbitmq
+    #    restart: unless-stopped
+
   ##### APPLICATION services #####
 
 

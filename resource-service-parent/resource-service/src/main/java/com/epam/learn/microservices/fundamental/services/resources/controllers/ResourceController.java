@@ -4,6 +4,7 @@ package com.epam.learn.microservices.fundamental.services.resources.controllers;
 import com.epam.learn.microservices.fundamental.common.dto.DeletedIdsResponse;
 import com.epam.learn.microservices.fundamental.common.dto.IdResponse;
 import com.epam.learn.microservices.fundamental.services.api.ResourceServiceApi;
+import com.epam.learn.microservices.fundamental.services.resources.services.ResourceProcessorSender;
 import com.epam.learn.microservices.fundamental.services.resources.services.ResourcesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -31,10 +32,12 @@ public class ResourceController implements ResourceServiceApi {
     private static final int VALID_CSV_LENGTH_RESTRICTION = 200;
     private static final String AUDIO_MPEG_CONTENT_TYPE = "audio/mpeg";
     private final ResourcesService resourcesService;
+    private final ResourceProcessorSender resourceProcessorSender;
 
     @Autowired
-    public ResourceController(ResourcesService resourcesService) {
+    public ResourceController(ResourcesService resourcesService, ResourceProcessorSender resourceProcessorSender) {
         this.resourcesService = resourcesService;
+        this.resourceProcessorSender = resourceProcessorSender;
     }
 
     @PostMapping(value = "/resources")
@@ -43,6 +46,7 @@ public class ResourceController implements ResourceServiceApi {
             return ResponseEntity.badRequest().build();
         }
         final var idResponse = resourcesService.addResources(mp3.getOriginalFilename(), mp3.getInputStream());
+        resourceProcessorSender.send(idResponse.id());
         return ResponseEntity.ok().body(idResponse);
     }
 

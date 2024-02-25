@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: resource-processor
+
+  banner:
+    location: classpath:banner.txt
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+retry:
+  maxAttempts: 10
+  backOffPeriod: 3000
