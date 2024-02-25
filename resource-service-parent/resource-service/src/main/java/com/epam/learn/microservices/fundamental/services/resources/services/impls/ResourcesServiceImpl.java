@@ -33,8 +33,8 @@ public class ResourcesServiceImpl implements ResourcesService {
     @Transactional
     public IdResponse addResources(String originalFilename, InputStream mp3InputStream) {
         final var key = UUID.randomUUID() + "_" + originalFilename;
-        final var songEntity = resourceRepository.save(new ResourceEntity(originalFilename, key));
-        final var resourceId = songEntity.getId();
+        final var resourceEntity = resourceRepository.save(new ResourceEntity(originalFilename, key));
+        final var resourceId = resourceEntity.getId();
         try {
             storageService.saveObject(key, mp3InputStream.readAllBytes());
         } catch (IOException e) {

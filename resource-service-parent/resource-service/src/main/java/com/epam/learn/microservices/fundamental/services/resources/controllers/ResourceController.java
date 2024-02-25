@@ -42,8 +42,8 @@ public class ResourceController implements ResourceServiceApi {
         if (!AUDIO_MPEG_CONTENT_TYPE.equals(mp3.getContentType())) {
             return ResponseEntity.badRequest().build();
         }
-        final var songResponse = resourcesService.addResources(mp3.getOriginalFilename(), mp3.getInputStream());
-        return ResponseEntity.ok().body(songResponse);
+        final var idResponse = resourcesService.addResources(mp3.getOriginalFilename(), mp3.getInputStream());
+        return ResponseEntity.ok().body(idResponse);
     }
 
 
