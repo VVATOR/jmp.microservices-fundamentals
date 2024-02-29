@@ -79,6 +79,18 @@ services:
     networks:
       - spring-services-network
 
+  ##### Infrastructure services #####
+  discovery-service:
+    image: jmp.microservices.fundamental/discovery-service:latest
+    env_file:
+      - ./local-config/discovery-service.local.env
+    expose:
+      - "8761:8761"
+    ports:
+      - "8761:8761"
+    networks:
+      - spring-services-network
+
   ##### APPLICATION services #####
   resource-processor:
     image: jmp.microservices.fundamental/resource-processor:latest

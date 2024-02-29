@@ -20,6 +20,7 @@
         <module>song-service-parent</module>
         <module>resource-service-parent</module>
         <module>resource-processor</module>
+        <module>discovery-service</module>
     </modules>
 
     <properties>
@@ -52,6 +53,7 @@
                 <artifactId>spring-boot-starter-amqp</artifactId>
                 <version>${spring.boot.starter.amqp.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
