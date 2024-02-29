@@ -32,6 +32,8 @@ services:
   localstack:
     container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main1}"
     image: localstack/localstack
+    expose:
+      - "4566:4566"
     ports:
       - "4510-4559:4510-4559"         # external services port range
       - "4566:4566"                   # LocalStack Gateway
@@ -45,6 +47,7 @@ services:
       - DOCKER_HOST=unix:///var/run/docker.sock
       - AWS_ACCESS_KEY_ID=localstack
       - AWS_SECRET_ACCESS_KEY=localstack
+      - AWS_BUCKET=localstack-s3-bucket
       - DEFAULT_REGION=us-east-1
     volumes:
       #- "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
@@ -59,8 +62,8 @@ services:
     image: rabbitmq:3.10.7-management
     restart: no
     ports:
-      - 15672:15672
-      - 5672:5672
+      - "15672:15672"
+      - "5672:5672"
     #  rabbitmq:
     #    image: rabbitmq:3-alpine
     #    container_name: "rabbitmq"
@@ -73,9 +76,48 @@ services:
     ##    networks:
     ##      - rabbitmq
     #    restart: unless-stopped
+    networks:
+      - spring-services-network
 
   ##### APPLICATION services #####
+  resource-processor:
+    image: jmp.microservices.fundamental/resource-processor:latest
+    env_file:
+      - ./local-config/resource-processor.local.env
+    #    environment:
+    #      SPRING_PROFILES_ACTIVE: "local"
+    depends_on:
+      - rabbitmq
+    networks:
+      - spring-services-network
 
+  resource-service:
+    image: jmp.microservices.fundamental/resource-service:latest
+    env_file:
+      - ./local-config/resource-service.local.env
+    depends_on:
+      - resource-service-db
+      - localstack
+      - rabbitmq
+    expose:
+      - "8181:8181"
+    ports:
+      - "8181:8181"
+    networks:
+      - spring-services-network
+
+  song-service:
+    image: jmp.microservices.fundamental/song-service:latest
+    env_file:
+      - ./local-config/song-service.local.env
+    depends_on:
+      - song-service-db
+    expose:
+      - "8182:8182"
+    ports:
+      - "8182:8182"
+    networks:
+      - spring-services-network
 
 networks:
   spring-services-network:

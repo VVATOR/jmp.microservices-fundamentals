@@ -1,5 +1,5 @@
 server:
-  port: ${PORT:0}
+  port: ${SONG_SERVICE_PORT:0}
   servlet:
     context-path: /
 

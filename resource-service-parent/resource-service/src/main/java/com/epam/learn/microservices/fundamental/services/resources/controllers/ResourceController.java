@@ -6,6 +6,7 @@ import com.epam.learn.microservices.fundamental.common.dto.IdResponse;
 import com.epam.learn.microservices.fundamental.services.api.ResourceServiceApi;
 import com.epam.learn.microservices.fundamental.services.resources.services.ResourceProcessorSender;
 import com.epam.learn.microservices.fundamental.services.resources.services.ResourcesService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -27,6 +28,7 @@ import java.util.Arrays;
 
 @RestController
 @RequestMapping("")
+@Slf4j
 public class ResourceController implements ResourceServiceApi {
     private static final String IDS_PARAMETER_SEPARATOR = ",";
     private static final int VALID_CSV_LENGTH_RESTRICTION = 200;
@@ -42,6 +44,7 @@ public class ResourceController implements ResourceServiceApi {
 
     @PostMapping(value = "/resources")
     public ResponseEntity<IdResponse> postResources(@RequestPart("mp3") MultipartFile mp3) throws IOException {
+        log.info("resource uploading");
         if (!AUDIO_MPEG_CONTENT_TYPE.equals(mp3.getContentType())) {
             return ResponseEntity.badRequest().build();
         }

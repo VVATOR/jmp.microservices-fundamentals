@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-@FeignClient(name = "resource-service", url = "http://localhost:8181")
+@FeignClient(name = "resource-service", url = "${RESOURCE_SERVICE_URL}")
 public interface ResourceServiceFeignClient extends ResourceServiceApi {
 
     @PostMapping(value = "/resources")

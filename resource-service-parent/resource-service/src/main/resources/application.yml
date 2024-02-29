@@ -1,5 +1,5 @@
 server:
-  port: ${PORT:0}
+  port: ${RESOURCE_SERVICE_PORT:0}
   servlet:
     context-path: /
 
@@ -40,8 +40,8 @@ aws:
     endpointUrl: ${AWS_ENDPOINT_URL}
     region: ${AWS_REGION}
     bucket: ${AWS_BUCKET}
-    accessKey: ${AWS_USERNAME}
-    secretKey: ${AWS_PASSWORD}
+    accessKey: ${AWS_ACCESS_KEY_ID}
+    secretKey: ${AWS_SECRET_ACCESS_KEY}
 
 management:
   endpoints:
