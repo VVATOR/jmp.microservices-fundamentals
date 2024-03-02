@@ -91,6 +91,20 @@ services:
     networks:
       - spring-services-network
 
+  api-gateway-service:
+    image: jmp.microservices.fundamental/api-gateway-service:latest
+    env_file:
+      - ./local-config/api-gateway-service.local.env
+    expose:
+      - "8888:8888"
+    ports:
+      - "8888:8888"
+    depends_on:
+      - discovery-service
+
+    networks:
+      - spring-services-network
+
   ##### APPLICATION services #####
   resource-processor:
     image: jmp.microservices.fundamental/resource-processor:latest

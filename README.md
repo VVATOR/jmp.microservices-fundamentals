@@ -247,4 +247,9 @@ Sample implementation: [Eureka Example](https://www.javainuse.com/spring/cloud-g
 - use [EPAM Cloud](https://kb.epam.com/display/EPMCITFAQ/Personal+Projects)
 
 
+
+### NOTES
+- **Spring MVC is incompatible with Spring Cloud Gateway.**
+
+    Please set `spring.main.web-application-type=reactive` or remove `spring-boot-starter-web` dependency.
 </details>

@@ -1,0 +1,31 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: api-gateway-service
+  banner:
+    location: classpath:banner.txt
+
+  cloud:
+    gateway:
+      routes:
+        ## RESOURCE SERVICE
+        - id: resource-service
+          uri: lb://resource-service
+          predicates:
+            - Path=/resources/**
+        ## SONG SERVICE
+        - id: song-service
+          uri: lb://song-service
+          predicates:
+            - Path=/songs/**
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka}
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: INFO
+    org.springframework.cloud.gateway: TRACE

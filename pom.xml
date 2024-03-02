@@ -16,11 +16,13 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>discovery-service</module>
+        <module>api-gateway-service</module>
+
         <module>common-module</module>
         <module>song-service-parent</module>
         <module>resource-service-parent</module>
         <module>resource-processor</module>
-        <module>discovery-service</module>
     </modules>
 
     <properties>
