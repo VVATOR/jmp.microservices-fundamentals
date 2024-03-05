@@ -5,12 +5,14 @@ services:
   resource-service-db:
     image: postgres
     restart: always
-    env_file:
-      - ./local-config/resource-service.local.env
+    environment:
+      - POSTGRES_DB=${RESOURCE_POSTGRES_DB}
+      - POSTGRES_USER=${RESOURCE_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${RESOURCE_POSTGRES_PASSWORD}
     expose: # allow access in docker network only (service not available from host)
-      - 5432:5432
+      - "5432"
     ports: # allow access from host to services in docker (service available from host)
-      - 5432:5432
+      - "5432:5432"
     command: -p 5432
     networks:
       - spring-services-network
@@ -18,12 +20,14 @@ services:
   song-service-db:
     image: postgres
     restart: always
-    env_file:
-      - ./local-config/song-service.local.env
+    environment:
+      - POSTGRES_DB=${SONG_POSTGRES_DB}
+      - POSTGRES_USER=${SONG_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${SONG_POSTGRES_PASSWORD}
     expose: # allow access in docker network only (service not available from host)
-      - 5433:5433
+      - "5433"
     ports: # allow access from host to services in docker (service available from host)
-      - 5433:5433
+      - "5433:5433"
     command: -p 5433
     networks:
       - spring-services-network
@@ -33,7 +37,7 @@ services:
     container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main1}"
     image: localstack/localstack
     expose:
-      - "4566:4566"
+      - "4566"
     ports:
       - "4510-4559:4510-4559"         # external services port range
       - "4566:4566"                   # LocalStack Gateway
@@ -45,10 +49,10 @@ services:
       - DEBUG=1
       - SERVICES=s3
       - DOCKER_HOST=unix:///var/run/docker.sock
-      - AWS_ACCESS_KEY_ID=localstack
-      - AWS_SECRET_ACCESS_KEY=localstack
-      - AWS_BUCKET=localstack-s3-bucket
-      - DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_BUCKET=${AWS_BUCKET}
+      - DEFAULT_REGION=${AWS_DEFAULT_REGION}
     volumes:
       #- "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
@@ -61,21 +65,11 @@ services:
   rabbitmq:
     image: rabbitmq:3.10.7-management
     restart: no
+    expose:
+      - "5672"
     ports:
       - "15672:15672"
-      - "5672:5672"
-    #  rabbitmq:
-    #    image: rabbitmq:3-alpine
-    #    container_name: "rabbitmq"
-    #    ports:
-    #      - 5672:5672
-    #      - 15672:15672
-    #    volumes:
-    #      - ./rabbitmq/data/:/var/lib/rabbitmq/
-    #      - ./rabbitmq/log/:/var/log/rabbitmq
-    ##    networks:
-    ##      - rabbitmq
-    #    restart: unless-stopped
+      #- "5672:5672"
     networks:
       - spring-services-network
 
@@ -83,9 +77,9 @@ services:
   discovery-service:
     image: jmp.microservices.fundamental/discovery-service:latest
     env_file:
-      - ./local-config/discovery-service.local.env
+      - .env
     expose:
-      - "8761:8761"
+      - "8761"
     ports:
       - "8761:8761"
     networks:
@@ -94,54 +88,58 @@ services:
   api-gateway-service:
     image: jmp.microservices.fundamental/api-gateway-service:latest
     env_file:
-      - ./local-config/api-gateway-service.local.env
+      - .env
     expose:
-      - "8888:8888"
+      - "8080"
     ports:
-      - "8888:8888"
+      - "8080:8080"
     depends_on:
       - discovery-service
+    networks:
+      - spring-services-network
 
+  config-service:
+    image: jmp.microservices.fundamental/config-service:latest
+    env_file:
+      - .env
+    depends_on:
+      - discovery-service
     networks:
       - spring-services-network
 
   ##### APPLICATION services #####
   resource-processor:
     image: jmp.microservices.fundamental/resource-processor:latest
+    restart: always
     env_file:
-      - ./local-config/resource-processor.local.env
-    #    environment:
-    #      SPRING_PROFILES_ACTIVE: "local"
+      - .env
     depends_on:
+      - discovery-service
       - rabbitmq
     networks:
       - spring-services-network
 
   resource-service:
     image: jmp.microservices.fundamental/resource-service:latest
+    restart: always
     env_file:
-      - ./local-config/resource-service.local.env
+      - .env
     depends_on:
+      - discovery-service
       - resource-service-db
       - localstack
       - rabbitmq
-    expose:
-      - "8181:8181"
-    ports:
-      - "8181:8181"
     networks:
       - spring-services-network
 
   song-service:
     image: jmp.microservices.fundamental/song-service:latest
+    restart: always
     env_file:
-      - ./local-config/song-service.local.env
+      - .env
     depends_on:
+      - discovery-service
       - song-service-db
-    expose:
-      - "8182:8182"
-    ports:
-      - "8182:8182"
     networks:
       - spring-services-network
 

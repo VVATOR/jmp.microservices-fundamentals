@@ -247,9 +247,26 @@ Sample implementation: [Eureka Example](https://www.javainuse.com/spring/cloud-g
 - use [EPAM Cloud](https://kb.epam.com/display/EPMCITFAQ/Personal+Projects)
 
 
+---
 
 ### NOTES
 - **Spring MVC is incompatible with Spring Cloud Gateway.**
-
     Please set `spring.main.web-application-type=reactive` or remove `spring-boot-starter-web` dependency.
+
+- You should use 'eureka.instance.prefer-ip-address=true' in application.properties file of all the microservices you are calling from api-gateway. Root cause is that your api-gateway is calling the microservices using username of the system which you need to call using ip address of the system.
+
+- You should use 'eureka.instance.hostname=localhost` (https://stackoverflow.com/questions/66133925/spring-boot-api-gateway-unable-to-resolve-name)
+
+- Important!
+```properties  
+spring:
+    cloud:
+        gateway:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true # !Important to use lowercase for serviceId that in discovery service in uppercase by default
+```
+
+
 </details>

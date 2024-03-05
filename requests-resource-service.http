@@ -23,6 +23,5 @@ Content-Disposition: form-data; name="mp3"; filename="valhalla_calling.mp3"
 ### Get the binary audio data of a resource
 GET http://localhost:8181/resources/1
 
-
 ### Delete Resource by id (CSV string id's separated ',')
 DELETE http://localhost:8181/resources?id=1
