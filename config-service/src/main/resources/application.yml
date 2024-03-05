@@ -1,0 +1,40 @@
+server:
+  #@see Spring Cloud Config Server — Discovery First Vs Config First: https://medium.com/@athulravindran/spring-cloud-config-server-discovery-first-vs-config-first-72cc6a56f471
+  #port: 8888 #when used 'config first' approach we should use static port
+  port: 0 # when used 'discovery first' approach - possible to use random port
+
+spring:
+  application:
+    name: config-service
+  banner:
+    location: classpath:banner.txt
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          fail-on-error: false
+          search-locations:
+            - classpath:/config/
+            - classpath:/config/{application}/
+        #git:
+        #  uri: https://github.com/VVATOR/jmp.microservices-fundamentals
+        #  clone-on-start: true
+        #  search-paths: config-server-repo
+
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    instanceId: ${spring.profiles.active:default}-${spring.application.name}-id${random.uuid}
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://${eureka.instance.hostname}:8761/eureka}
+
+logging:
+  level:
+    root: INFO

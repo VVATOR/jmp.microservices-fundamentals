@@ -1,10 +1,7 @@
+server:
+  port: 0
+
 spring:
-  application:
-    name: resource-processor
-
-  banner:
-    location: classpath:banner.txt
-
   rabbitmq:
     host: ${RABBIT_MQ_HOST}
     port: ${RABBIT_MQ_PORT}

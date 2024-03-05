@@ -1,0 +1,49 @@
+server:
+  port: 0
+
+spring:
+  datasource:
+    url: ${RESOURCE_POSTGRES_URL}
+    username: ${RESOURCE_POSTGRES_USER}
+    password: ${RESOURCE_POSTGRES_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+
+  rabbitmq:
+    host: ${RABBIT_MQ_HOST:localhost}
+    port: ${RABBIT_MQ_PORT}
+    username: ${RABBIT_MQ_USERNAME}
+    password: ${RABBIT_MQ_PASSWORD}
+    template:
+      exchange: "x.processing-exchange"
+      routing-key: "rk.processing-exchange"
+      default-receive-queue: "q.processing-queue"
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+aws:
+  s3:
+    endpointUrl: ${AWS_ENDPOINT_URL:http://localhost:4566}
+    region: ${AWS_DEFAULT_REGION:us-east-1}
+    bucket: ${AWS_BUCKET}
+    accessKey: ${AWS_ACCESS_KEY_ID}
+    secretKey: ${AWS_SECRET_ACCESS_KEY}
+
+eureka:
+  instance:
+    instanceId: ${spring.profiles.active:default}-${spring.application.name}-id${random.uuid}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
