@@ -1,0 +1,22 @@
+server:
+  port: 0
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/resource-service-db
+    username: resource
+    password: s3cr3t
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+aws:
+  s3:
+    endpointUrl: "http://localhost:4566"
+    region: "us-east-1"
+    bucket: localstack-s3-bucket
+    accessKey: localstack
+    secretKey: localstack

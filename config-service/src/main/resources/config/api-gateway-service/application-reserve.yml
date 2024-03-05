@@ -1,0 +1,34 @@
+#server:
+#  port: 8084
+#
+#spring:
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: resource-service
+#          uri: lb://resource-service
+#          predicates:
+#            - Path=/resources/**
+#
+#        - id: song-service
+#          uri: lb://song-service
+#          predicates:
+#            - Path=/songs/**
+#
+#        - id: discovery-service
+#          uri: http://discovery-service:8761
+#          predicates:
+#            - Path=/eureka
+#          filters:
+#            - SetPath=/
+#
+#        - id: discovery-service-styles
+#          uri: http://discovery-service:8761
+#          predicates:
+#            - Path=/eureka/**
+#
+#logging:
+#  level:
+#    root: INFO
+#    org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: INFO
+#    org.springframework.cloud.gateway: TRACE
