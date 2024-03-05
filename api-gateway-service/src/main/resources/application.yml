@@ -1,31 +1,73 @@
 server:
   port: 8080
+
 spring:
   application:
     name: api-gateway-service
   banner:
     location: classpath:banner.txt
 
+  devtools:
+    livereload:
+      enabled: true
   cloud:
     gateway:
-      routes:
-        ## RESOURCE SERVICE
-        - id: resource-service
-          uri: lb://resource-service
-          predicates:
-            - Path=/resources/**
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true # !Important to use lowercase for serviceId that in discovery service in uppercase by default
+      ###Here we should define routing
+      ###But I didn't do it because used service discovery therefore routes prepared automatically
+      #routes:
+        ### RESOURCE SERVICE
+        #- id: mp3-resource-service
+        #  uri: lb://resource-service
+        #  predicates:
+        #    - Path=/resources/**
         ## SONG SERVICE
-        - id: song-service
-          uri: lb://song-service
-          predicates:
-            - Path=/songs/**
+        #- id: song-service
+        #  uri: lb://song-service
+        #  predicates:
+        #    - Path=/**
+        #  filters:
+        #    - SetPath=/
+        ### SERVICE DISCOVERY
+        #- id: service-discovery
+        #  uri: http://localhost:8761
+        #  predicates:
+        #    - Path=/eureka
+        #  filters:
+        #    - SetPath=/
+        ### SERVICE DISCOVERY STYLES
+        #- id: service-discovery-styles
+        #  uri: http://localhost:8761
+        #  predicates:
+
 eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    instanceId: ${spring.profiles.active:default}-${spring.application.name}-id${random.uuid}
   client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka}
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://${eureka.instance.hostname}:8761/eureka}
 
 logging:
   level:
     root: INFO
     org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: INFO
     org.springframework.cloud.gateway: TRACE
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+    refresh:
+      enabled: true
+    health:
+      enabled: true
+  endpoints:
+    enabled-by-default: true

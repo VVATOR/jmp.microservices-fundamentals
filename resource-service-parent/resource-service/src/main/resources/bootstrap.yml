@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: resource-service
+
+  banner:
+    location: classpath:banner.txt
+
+  cloud:
+    config:
+      #@see Spring Cloud Config Server — Discovery First Vs Config First: https://medium.com/@athulravindran/spring-cloud-config-server-discovery-first-vs-config-first-72cc6a56f471
+      #uri: http://localhost:8888  #when used 'config first'
+      fail-fast: true
+      retry:
+        max-attempts: 20
+        max-interval: 15000
+        initial-interval: 10000
+      discovery: #used 'discovery first' approach
+        enabled: true
+        service-id: config-service
+
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    instanceId: ${spring.profiles.active:default}-${spring.application.name}-id${random.uuid}
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://${eureka.instance.hostname}:8761/eureka}

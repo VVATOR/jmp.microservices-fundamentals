@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "song-service", url = "${SONG_SERVICE_URL}")
+@FeignClient(name = "song-service")
 public interface SongServiceFeignClient extends SongServiceApi {
 
     @PostMapping(value = "/songs")
