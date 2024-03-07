@@ -155,4 +155,51 @@ In this module it is needed to adjust services with adding tests.
 - At least one test should be executed for each test type.
 
 
+## MY NOTES
+
+
+### How to make WSL Docker accessible from Windows host:
+
+Run with Powershell (as admin):
+```$wslip = ((wsl hostname -I) -split " ")[0]
+  $dockerhost = "tcp://" + $wslip + ":2375"
+  setx DOCKER_HOST $dockerhost
+  Write-Host "Set: setx DOCKER_HOST $dockerhost"
+  #get-childitem env:*
+  Read-Host -Prompt "Press Enter to exit"
+```
+This command returns connection address like `tcp://172.25.34.178:2375`
+Its address we should add to configuration **c:\Users\<user_name>\.testcontainers.properties**
+that testcontainers used to connection with docker 
+```properties
+docker.client.strategy=org.testcontainers.dockerclient.NpipeSocketClientProviderStrategy
+docker.host=tcp://172.25.34.178:2375
+
+# docker.host it's internal wsl IP that should be configured to access in WSL 
+```
+
+In WSL terminal you should to add address from  the previous step to **/etc/docker/daemon.json**
+with come text editor
+
+```
+{
+  "hosts": [
+    "unix:///var/run/docker.sock", 
+    "tcp://172.25.34.178:2375"
+  ]
+}
+```
+Restart wsl wih help PowerShell:
+```
+  wsl --shutdown
+  wsl -l
+```
+
+
+**Useful links:**
+
+- [Fix the issue with listening docker from host in WSL](https://github.com/testcontainers/testcontainers-java/issues/4958)
+- [How to install WSL](https://dev.to/bowmanjd/install-docker-on-windows-wsl-without-docker-desktop-34m9)
+- [DB Integration Tests with Spring Boot and Testcontainers](https://www.baeldung.com/spring-boot-testcontainers-integration-test)
+
 </details>
