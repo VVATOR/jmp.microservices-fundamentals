@@ -29,6 +29,8 @@
         <spring.cloud.starter.parent.version>2023.0.0</spring.cloud.starter.parent.version>
         <spring.retry.version>2.0.4</spring.retry.version>
         <aws.sdk.version>2.23.17</aws.sdk.version>
+        <cucumber.version>7.15.0</cucumber.version>
+        <h2.version>1.4.199</h2.version>
         <lombok.version>1.18.28</lombok.version>
         <tika.parsers.version>1.28.5</tika.parsers.version>
         <testcontainers.version>1.17.6</testcontainers.version>
@@ -105,16 +107,32 @@
                 <groupId>org.testcontainers</groupId>
                 <artifactId>junit-jupiter</artifactId>
                 <version>${testcontainers.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>testcontainers</artifactId>
                 <version>${testcontainers.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${testcontainers.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-bom</artifactId>
+                <version>${cucumber.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
